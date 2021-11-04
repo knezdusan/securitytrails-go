@@ -3,7 +3,7 @@ A GOlang based wrapper for SecurityTrails
 
 Based off https://docs.securitytrails.com/reference
 
-API Wrapper Function Documentation: https://github.com/knezdusan/SecurityTrails-GOlang-Wrapper/wiki
+<!-- Work in progress: API Wrapper Function Documentation: https://github.com/knezdusan/SecurityTrails-GOlang-Wrapper/wiki -->
 
 ## Usage examples
 
