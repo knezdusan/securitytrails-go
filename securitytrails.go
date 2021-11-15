@@ -22,6 +22,7 @@
 package main
 
 import (
+	// "fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -223,6 +224,125 @@ func (st *stsdk) getSSLCertificatesPages(domain string, include_subdomains bool,
 // status:string | Valid values are "valid", "all", and "expired". Default is valid.
 func (st *stsdk) getSSLCertificatesStream(domain string, include_subdomains bool, status string) string{
 	url := "https://api.securitytrails.com/v1/domain/" + domain + "/ssl_stream?include_subdomains=" + strconv.FormatBool(include_subdomains) + "&status=" + status
+
+	req, _ := http.NewRequest("GET", url, nil)
+
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("APIKEY", st.key)
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	return string(body)
+}
+
+
+// DNS History - Lists out specific historical information about the given hostname parameter. 
+// Path Param:
+// type:string | Allowed values: a, aaaa, mx, ns, soa or txt
+// Query Params:
+// page:int32 | The page of the returned results, starting at 1. A page returns 100 results.
+func (st *stsdk) getDNSHistory(domain string, record_type string, page_number int32) string{
+	url := "https://api.securitytrails.com/v1/history/" + domain + "/dns/" + record_type + "?page=" + strconv.FormatInt(int64(page_number), 10)
+
+	req, _ := http.NewRequest("GET", url, nil)
+
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("APIKEY", st.key)
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	return string(body)
+}
+
+
+// WHOIS History - Returns historical WHOIS information about the given domain.
+// Query Params:
+// page:int32 | The page of the returned results, starting at 1. A page returns 100 results.
+func (st *stsdk) getWHOISHistory(domain string, page_number int32) string{
+	url := "https://api.securitytrails.com/v1/history/" + domain + "/whois?page=" + strconv.FormatInt(int64(page_number), 10)
+
+	req, _ := http.NewRequest("GET", url, nil)
+
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("APIKEY", st.key)
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	return string(body)
+}
+
+
+// IP Neighbors - Returns the neighbors in any given IP level range
+func (st *stsdk) getIPNeighbors(ip string) string{
+	url := "https://api.securitytrails.com/v1/ips/nearby/" + ip
+
+	req, _ := http.NewRequest("GET", url, nil)
+
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("APIKEY", st.key)
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	return string(body)
+}
+
+
+// IP WHOIS - Fetch current IP information for a single IPv4 address.
+func (st *stsdk) getIPWHOIS(ip string) string{
+	url := "https://api.securitytrails.com/v1/ips/" + ip + "/whois"
+
+	req, _ := http.NewRequest("GET", url, nil)
+
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("APIKEY", st.key)
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	return string(body)
+}
+
+
+// IP Useragents - Fetch user agents seen during the last 30 days for a specific IPv4 address. 
+// Query Params:
+// page:int32 | The page of the returned results, starting at 1. A page returns 100 results.
+func (st *stsdk) getIPUseragents(ip string, page_number int32) string{
+	url := "https://api.securitytrails.com/v1/ips/" + ip + "/useragents?page=" + strconv.FormatInt(int64(page_number), 10)
+
+	req, _ := http.NewRequest("GET", url, nil)
+
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("APIKEY", st.key)
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	return string(body)
+}
+
+
+// FIREHOSE Certificate Transparency - Stream Certificate Transparency entries
+// Query Params:
+// Start:int32 | Start UNIX timestamp. Without a value it starts whenever the call is sent.
+// End:int32 | End UNIX timestamp. Without a value it continues to stream results.
+func (st *stsdk) getFirehoseCertificateTransparency(start int32, end int32) string{
+	url := "https://api.securitytrails.com/v1/firehose/ct-logs?start=" + strconv.FormatInt(int64(start), 10) + "&end=" + strconv.FormatInt(int64(end), 10)
 
 	req, _ := http.NewRequest("GET", url, nil)
 

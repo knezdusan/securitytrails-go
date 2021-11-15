@@ -64,7 +64,7 @@ func main() {
 ### History
 
 - [X] DNS History
-- [X] WHOIS History
+- [ ] WHOIS History
 
 ### IPs
 
