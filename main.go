@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func main() {
-	st := newST("c0LxAP033JLunaGxxzkdNUU7OoF8J70M")
+	st := newST("YOUR.APP.KEY.HERE")
 
 	// General *******************************
 	// res := st.checkPing()
