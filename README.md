@@ -55,8 +55,8 @@ func main() {
 - [X] Subdomains
 - [X] Tags
 - [X] WHOIS
-- [ ] Search
-- [ ] Statistics
+- [X] Search
+- [X] Statistics
 - [X] Associated domains
 - [X] SSL Certificates (Pages)
 - [X] SSL Certificates (Stream)
@@ -64,21 +64,15 @@ func main() {
 ### History
 
 - [X] DNS History
-- [ ] WHOIS History
+- [X] WHOIS History
 
 ### IPs
 
 - [X] Neighbors
-- [ ] Search with DSL
-- [ ] Statistics
+- [X] Search with DSL
+- [X] Statistics
 - [X] Whois
 - [X] Useragents
-
-### Feeds
-
-- [ ] Domains
-- [ ] DMARC
-- [ ] Subdomains
 
 ### Firehose
 
