@@ -10,12 +10,12 @@ func main() {
 	// res := st.checkUsage()
 
 
-	// Company ******************************* 
+	// Company *******************************
 	// res := st.getCompanyDetails("google.com")
 	// res := st.getCompanyAssociatedIPs("google.com")
 
 	
-	// Domains ******************************* 
+	// Domains *******************************
 	// res := st.getDomainDetails("google.com")
 	// res := st.getDomainSubdomains("google.com")
 	// res := st.getDomainTags("google.com")
@@ -58,7 +58,91 @@ func main() {
 
 
 	// Firehose *************************************
-	res := st.getFirehoseCertificateTransparency(1628089450, 1633359850)
+	// res := st.getFirehoseCertificateTransparency(1628089450, 1633359850)
+
+
+	// **************** POST Queries with parameters: ********************************************
+
+	// Search ********************************
+	// // Filter and search specific records using this endpoint.
+	// // Sample Use Cases: Search for all hostnames that point to your IP address
+	// var ips = true
+	// var page_number int64 = 1
+	// var scroll = true
+	
+	// queryData := map[string]string{
+	// 	"ipv4": "",
+	// 	"ipv6": "",
+	// 	"apex_domain": "google.com",
+	// 	"keyword": "",
+	// 	"mx": "",
+	// 	"ns": "",
+	// 	"cname": "",
+	// 	"subdomain": "mail",
+	// 	"soa_email": "",
+	// 	"tld": "com",
+	// 	"whois_email": "",
+	// 	"whois_street1": "",
+	// 	"whois_telephone": "",
+	// 	"whois_postalCode": "",
+	// 	"whois_organization": "",
+	// 	"whois_name": "",
+	// 	"whois_fax": "",
+	// 	"whois_city": "",
+	// 	"whois_country": "",
+	// }
+
+	// res := st.postDomainSearch(ips, page_number, scroll, queryData)
+
+
+	// Statistics ********************************
+	// // Filter and search specific records using this endpoint.
+	// // Sample Use Cases: Search for all hostnames that point to your IP address
+	
+	// queryData := map[string]string{
+	// 	"ipv4": "",
+	// 	"ipv6": "",
+	// 	"apex_domain": "google.com",
+	// 	"keyword": "",
+	// 	"mx": "",
+	// 	"ns": "",
+	// 	"cname": "",
+	// 	"subdomain": "",
+	// 	"soa_email": "",
+	// 	"tld": "com",
+	// 	"whois_email": "",
+	// 	"whois_street1": "",
+	// 	"whois_telephone": "",
+	// 	"whois_postalCode": "",
+	// 	"whois_organization": "",
+	// 	"whois_name": "",
+	// 	"whois_fax": "",
+	// 	"whois_city": "",
+	// 	"whois_country": "",
+	// }
+
+	// res := st.postDomainStatistics(queryData)
+
+
+	// Search with DSL ********************************
+	// // Search for IP addresses. A maximum of 10000 results can be retrieved.
+	// // Use simple JSON like query syntax.
+	// // Use advanced SecurityTrails DSL SQL like queries: https://docs.securitytrails.com/docs/how-to-use-the-dsl
+
+	// var page_number int64 = 1
+	// dslQuery := `{"query":"ptr_part = 'stackoverflow.com'"}`
+
+	// res := st.postDslSearch(page_number, dslQuery)
+
+
+	// Statistics with DSL ********************************
+	// // Statistics like Reverse DNS pattern identification, ports or total results are returned.
+	// // Use simple JSON like query syntax.
+	// // Use advanced SecurityTrails DSL SQL like queries: https://docs.securitytrails.com/docs/how-to-use-the-dsl
+
+	dslQuery := `{"query":"ptr_part = 'amazon.com'"}`
+
+	res := st.postDslStatistics(dslQuery)
 	
 	fmt.Println(res)
 }
