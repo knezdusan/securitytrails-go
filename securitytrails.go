@@ -26,6 +26,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 type stsdk struct {
@@ -179,6 +180,7 @@ func (st *stsdk) getDomainWHOIS(domain string) string{
 	return string(body)
 }
 
+
 // Associated domains - Find all domains that are related to a hostname you input
 func (st *stsdk) getAssociatedDomains(domain string) string{
 	url := "https://api.securitytrails.com/v1/domain/" + domain + "/associated"
@@ -186,6 +188,84 @@ func (st *stsdk) getAssociatedDomains(domain string) string{
 	req, _ := http.NewRequest("GET", url, nil)
 
 	req.Header.Add("Accept", "application/json")
+	req.Header.Add("APIKEY", st.key)
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	return string(body)
+}
+
+
+// SEARCH - Filter and search specific records
+func (st *stsdk) postDomainSearch(ips bool, page_number int64, scroll bool, queryData map[string]string) string{
+
+	url := "https://api.securitytrails.com/v1/domains/list?include_ips=" + strconv.FormatBool(ips) + "&page=" + strconv.FormatInt(int64(page_number), 10) + "&scroll=" + strconv.FormatBool(scroll)
+	queryParams := "";
+
+	for k, v := range queryData{
+		if(len(v) > 0){
+			queryParams += `"`+k+`":`+`"`+v+`",`
+		}
+	}
+
+	qLen := len(queryParams)
+
+	if qLen > 0 && queryParams[qLen-1] == ',' {
+		queryParams = queryParams[:qLen-1]
+	}
+
+	queryJson := `{
+		"filter":{
+			`+ queryParams +`
+		}
+	}`
+
+	payload := strings.NewReader(string(queryJson))
+	req, _ := http.NewRequest("POST", url, payload)
+
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("APIKEY", st.key)
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	return string(body)
+}
+
+
+// STATISTICS - Domain statistics
+func (st *stsdk) postDomainStatistics(queryData map[string]string) string{
+
+	url := "https://api.securitytrails.com/v1/domains/stats"
+	queryParams := "";
+
+	for k, v := range queryData{
+		if(len(v) > 0){
+			queryParams += `"`+k+`":`+`"`+v+`",`
+		}
+	}
+
+	qLen := len(queryParams)
+
+	if qLen > 0 && queryParams[qLen-1] == ',' {
+		queryParams = queryParams[:qLen-1]
+	}
+
+	queryJson := `{
+		"filter":{
+			`+ queryParams +`
+		}
+	}`
+
+	payload := strings.NewReader(string(queryJson))
+	req, _ := http.NewRequest("POST", url, payload)
+
+	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("APIKEY", st.key)
 
 	res, _ := http.DefaultClient.Do(req)
@@ -337,6 +417,46 @@ func (st *stsdk) getIPUseragents(ip string, page_number int32) string{
 }
 
 
+// Search with DSL - Search for IP addresses.
+func (st *stsdk) postDslSearch(page_number int64, queryJson string) string{
+
+	url := "https://api.securitytrails.com/v1/ips/list?page=" + strconv.FormatInt(int64(page_number), 10)
+
+	payload := strings.NewReader(string(queryJson))
+	req, _ := http.NewRequest("POST", url, payload)
+
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("APIKEY", st.key)
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	return string(body)
+}
+
+
+// Statistics with DSL - Reverse DNS pattern identification, ports or total results are returned
+func (st *stsdk) postDslStatistics(queryJson string) string{
+
+	url := "https://api.securitytrails.com/v1/ips/stats"
+
+	payload := strings.NewReader(string(queryJson))
+	req, _ := http.NewRequest("POST", url, payload)
+
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("APIKEY", st.key)
+
+	res, _ := http.DefaultClient.Do(req)
+
+	defer res.Body.Close()
+	body, _ := ioutil.ReadAll(res.Body)
+
+	return string(body)
+}
+
+
 // FIREHOSE Certificate Transparency - Stream Certificate Transparency entries
 // Query Params:
 // Start:int32 | Start UNIX timestamp. Without a value it starts whenever the call is sent.
@@ -356,5 +476,4 @@ func (st *stsdk) getFirehoseCertificateTransparency(start int32, end int32) stri
 
 	return string(body)
 }
-
 
